@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ThemeConstants {
   // Colors
@@ -79,6 +80,83 @@ class ThemeConstants {
     minimumSize: const Size(64, 40),
   );
 
+  // Text Styles with Poppins
+  static final TextTheme lightTextTheme = TextTheme(
+    displayLarge: GoogleFonts.poppins(
+      color: textPrimaryLight,
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+    ),
+    displayMedium: GoogleFonts.poppins(
+      color: textPrimaryLight,
+      fontSize: 28,
+      fontWeight: FontWeight.bold,
+    ),
+    displaySmall: GoogleFonts.poppins(
+      color: textPrimaryLight,
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+    ),
+    headlineMedium: GoogleFonts.poppins(
+      color: textPrimaryLight,
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+    ),
+    bodyLarge: GoogleFonts.poppins(
+      color: textPrimaryLight,
+      fontSize: 16,
+      fontWeight: FontWeight.normal,
+    ),
+    bodyMedium: GoogleFonts.poppins(
+      color: textSecondaryLight,
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+    ),
+    labelLarge: GoogleFonts.poppins(
+      color: textPrimaryLight,
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+    ),
+  );
+
+  static final TextTheme darkTextTheme = TextTheme(
+    displayLarge: GoogleFonts.poppins(
+      color: textPrimaryDark,
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+    ),
+    displayMedium: GoogleFonts.poppins(
+      color: textPrimaryDark,
+      fontSize: 28,
+      fontWeight: FontWeight.bold,
+    ),
+    displaySmall: GoogleFonts.poppins(
+      color: textPrimaryDark,
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+    ),
+    headlineMedium: GoogleFonts.poppins(
+      color: textPrimaryDark,
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+    ),
+    bodyLarge: GoogleFonts.poppins(
+      color: textPrimaryDark,
+      fontSize: 16,
+      fontWeight: FontWeight.normal,
+    ),
+    bodyMedium: GoogleFonts.poppins(
+      color: textSecondaryDark,
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+    ),
+    labelLarge: GoogleFonts.poppins(
+      color: textPrimaryDark,
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+    ),
+  );
+
   // Light Theme
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
@@ -104,26 +182,7 @@ class ThemeConstants {
         borderRadius: BorderRadius.circular(8),
       ),
     ),
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
-        color: textPrimaryLight,
-        fontSize: 32,
-        fontWeight: FontWeight.bold,
-      ),
-      displayMedium: TextStyle(
-        color: textPrimaryLight,
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
-      ),
-      bodyLarge: TextStyle(
-        color: textPrimaryLight,
-        fontSize: 16,
-      ),
-      bodyMedium: TextStyle(
-        color: textSecondaryLight,
-        fontSize: 14,
-      ),
-    ),
+    textTheme: lightTextTheme,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: elevatedButtonStyleLight,
     ),
@@ -160,26 +219,7 @@ class ThemeConstants {
         borderRadius: BorderRadius.circular(8),
       ),
     ),
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
-        color: textPrimaryDark,
-        fontSize: 32,
-        fontWeight: FontWeight.bold,
-      ),
-      displayMedium: TextStyle(
-        color: textPrimaryDark,
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
-      ),
-      bodyLarge: TextStyle(
-        color: textPrimaryDark,
-        fontSize: 16,
-      ),
-      bodyMedium: TextStyle(
-        color: textSecondaryDark,
-        fontSize: 14,
-      ),
-    ),
+    textTheme: darkTextTheme,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: elevatedButtonStyleDark,
     ),
