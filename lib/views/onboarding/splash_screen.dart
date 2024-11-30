@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:news_app/views/onboarding/onboarding_screen.dart';
 import 'package:news_app/views/auth/login_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+import 'package:news_app/controllers/auth_controller.dart';
+
+import '../news/article_detail_view_.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,6 +18,7 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
+  final _authController = Get.find<AuthController>();
 
   @override
   void initState() {
@@ -36,7 +41,6 @@ class _SplashScreenState extends State<SplashScreen>
       final prefs = await SharedPreferences.getInstance();
       final isFirstTime = prefs.getBool('is_first_time') ?? true;
 
-      // Wait for both animation and minimum splash duration
       await Future.wait([
         Future.delayed(const Duration(seconds: 2)),
         _controller.forward().orCancel,
@@ -44,19 +48,17 @@ class _SplashScreenState extends State<SplashScreen>
 
       if (!mounted) return;
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) =>
-              isFirstTime ? const OnboardingScreen() : const LoginView(),
-        ),
-      );
+      if (isFirstTime) {
+        Get.off(() => const OnboardingScreen());
+      } else if (_authController.isAuthenticated) {
+        Get.off(() => const NewsFeedView());
+      } else {
+        Get.off(() => const LoginView());
+      }
     } catch (e) {
       debugPrint('Navigation error: $e');
-      // Fallback to login view if there's an error
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginView()),
-        );
+        Get.off(() => const LoginView());
       }
     }
   }

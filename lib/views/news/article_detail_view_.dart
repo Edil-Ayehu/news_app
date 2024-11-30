@@ -46,7 +46,6 @@ class _NewsFeedViewState extends State<NewsFeedView> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final size = MediaQuery.of(context).size;
     final isTablet = size.width > 600;
 

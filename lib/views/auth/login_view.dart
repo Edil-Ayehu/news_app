@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/core/constants/app_constants.dart';
 import 'package:news_app/core/constants/theme_constants.dart';
+import 'package:news_app/views/auth/register_view.dart';
+import 'package:news_app/views/news/article_detail_view_.dart';
 import 'package:news_app/widgets/common/custom_button.dart';
 import 'package:news_app/widgets/common/custom_textfield.dart';
+import 'package:get/get.dart';
+import 'package:news_app/controllers/auth_controller.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -17,6 +20,7 @@ class _LoginViewState extends State<LoginView> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   bool _obscurePassword = true;
+  final _authController = Get.find<AuthController>();
 
   @override
   void dispose() {
@@ -27,10 +31,24 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> _handleLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
-      setState(() => _isLoading = true);
-      // TODO: Implement login logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-      setState(() => _isLoading = false);
+      try {
+        setState(() => _isLoading = true);
+        await _authController.signIn(
+          _emailController.text.trim(),
+          _passwordController.text,
+        );
+        Get.offAll(() => const NewsFeedView());
+      } catch (e) {
+        Get.snackbar(
+          'Error',
+          'Failed to sign in: ${e.toString()}',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } finally {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
+      }
     }
   }
 
@@ -44,7 +62,8 @@ class _LoginViewState extends State<LoginView> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: size.width > 600 ? 400 : double.infinity),
+            constraints: BoxConstraints(
+                maxWidth: size.width > 600 ? 400 : double.infinity),
             child: Form(
               key: _formKey,
               child: Column(
@@ -53,7 +72,9 @@ class _LoginViewState extends State<LoginView> {
                 children: [
                   Text(
                     'Welcome Back',
-                    style: (isDark ? ThemeConstants.darkTextTheme : ThemeConstants.lightTextTheme)
+                    style: (isDark
+                            ? ThemeConstants.darkTextTheme
+                            : ThemeConstants.lightTextTheme)
                         .headlineMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -78,7 +99,9 @@ class _LoginViewState extends State<LoginView> {
                     hint: 'Enter your password',
                     obscureText: _obscurePassword,
                     prefixIcon: Icons.lock_outline,
-                    suffixIcon: _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                    suffixIcon: _obscurePassword
+                        ? Icons.visibility
+                        : Icons.visibility_off,
                     onSuffixIconPressed: () {
                       setState(() => _obscurePassword = !_obscurePassword);
                     },
@@ -102,14 +125,16 @@ class _LoginViewState extends State<LoginView> {
                     children: [
                       Text(
                         "Don't have an account? ",
-                        style: (isDark ? ThemeConstants.darkTextTheme : ThemeConstants.lightTextTheme)
+                        style: (isDark
+                                ? ThemeConstants.darkTextTheme
+                                : ThemeConstants.lightTextTheme)
                             .bodyMedium,
                       ),
                       CustomButton(
                         label: 'Register',
                         type: CustomButtonType.text,
                         onPressed: () {
-                          Navigator.pushNamed(context, AppConstants.registerRoute);
+                          Get.to(() => const RegisterView());
                         },
                       ),
                     ],

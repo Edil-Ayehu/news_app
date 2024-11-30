@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/app_constants.dart';
 import 'package:news_app/core/constants/theme_constants.dart';
+import 'package:news_app/views/news/article_detail_view_.dart';
 import 'package:news_app/widgets/common/custom_button.dart';
 import 'package:news_app/widgets/common/custom_textfield.dart';
+import 'package:get/get.dart';
+import 'package:news_app/controllers/auth_controller.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -20,6 +23,7 @@ class _RegisterViewState extends State<RegisterView> {
   bool _isLoading = false;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  final _authController = Get.find<AuthController>();
 
   @override
   void dispose() {
@@ -32,10 +36,25 @@ class _RegisterViewState extends State<RegisterView> {
 
   Future<void> _handleRegister() async {
     if (_formKey.currentState?.validate() ?? false) {
-      setState(() => _isLoading = true);
-      // TODO: Implement registration logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-      setState(() => _isLoading = false);
+      try {
+        setState(() => _isLoading = true);
+        await _authController.register(
+          _emailController.text.trim(),
+          _passwordController.text,
+          _usernameController.text.trim(),
+        );
+        Get.offAll(() => const NewsFeedView());
+      } catch (e) {
+        Get.snackbar(
+          'Error',
+          'Failed to create account: ${e.toString()}',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } finally {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
+      }
     }
   }
 
@@ -52,7 +71,8 @@ class _RegisterViewState extends State<RegisterView> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: size.width > 600 ? 400 : double.infinity),
+            constraints: BoxConstraints(
+                maxWidth: size.width > 600 ? 400 : double.infinity),
             child: Form(
               key: _formKey,
               child: Column(
@@ -62,7 +82,7 @@ class _RegisterViewState extends State<RegisterView> {
                   CustomTextField(
                     controller: _usernameController,
                     label: 'Username',
-                    hint: 'Choose a username',
+                    hint: 'Enter your username',
                     prefixIcon: Icons.person_outline,
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
@@ -92,7 +112,9 @@ class _RegisterViewState extends State<RegisterView> {
                     hint: 'Create a password',
                     obscureText: _obscurePassword,
                     prefixIcon: Icons.lock_outline,
-                    suffixIcon: _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                    suffixIcon: _obscurePassword
+                        ? Icons.visibility
+                        : Icons.visibility_off,
                     onSuffixIconPressed: () {
                       setState(() => _obscurePassword = !_obscurePassword);
                     },
@@ -100,7 +122,8 @@ class _RegisterViewState extends State<RegisterView> {
                       if (value?.isEmpty ?? true) {
                         return 'Password is required';
                       }
-                      if ((value?.length ?? 0) < AppConstants.minPasswordLength) {
+                      if ((value?.length ?? 0) <
+                          AppConstants.minPasswordLength) {
                         return 'Password must be at least ${AppConstants.minPasswordLength} characters';
                       }
                       return null;
@@ -113,9 +136,12 @@ class _RegisterViewState extends State<RegisterView> {
                     hint: 'Confirm your password',
                     obscureText: _obscureConfirmPassword,
                     prefixIcon: Icons.lock_outline,
-                    suffixIcon: _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                    suffixIcon: _obscureConfirmPassword
+                        ? Icons.visibility
+                        : Icons.visibility_off,
                     onSuffixIconPressed: () {
-                      setState(() => _obscureConfirmPassword = !_obscureConfirmPassword);
+                      setState(() =>
+                          _obscureConfirmPassword = !_obscureConfirmPassword);
                     },
                     validator: (value) {
                       if (value != _passwordController.text) {
@@ -137,7 +163,9 @@ class _RegisterViewState extends State<RegisterView> {
                     children: [
                       Text(
                         'Already have an account? ',
-                        style: (isDark ? ThemeConstants.darkTextTheme : ThemeConstants.lightTextTheme)
+                        style: (isDark
+                                ? ThemeConstants.darkTextTheme
+                                : ThemeConstants.lightTextTheme)
                             .bodyMedium,
                       ),
                       CustomButton(
