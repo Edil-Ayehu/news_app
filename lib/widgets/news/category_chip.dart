@@ -21,34 +21,40 @@ class CategoryChip extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final isTablet = MediaQuery.of(context).size.width > 600;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        height: height ?? (isTablet ? 40 : 32),
-        padding: EdgeInsets.symmetric(
-          horizontal: isTablet ? 20 : 16,
-          vertical: isTablet ? 8 : 6,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? (isDark ? ThemeConstants.primaryDark : ThemeConstants.primaryLight)
-              : (isDark ? ThemeConstants.surfaceDark : ThemeConstants.surfaceLight),
-          borderRadius: BorderRadius.circular(isTablet ? 20 : 16),
-          border: Border.all(
-            color: isSelected
-                ? Colors.transparent
-                : (isDark ? ThemeConstants.primaryDark : ThemeConstants.primaryLight).withOpacity(0.5),
-            width: 1.5,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(30),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          height: height ?? (isTablet ? 36 : 32),
+          padding: EdgeInsets.symmetric(
+            horizontal: isTablet ? 24 : 20,
           ),
-        ),
-        child: Text(
-          label,
-          style: (isTablet ? textTheme.labelLarge : textTheme.bodyMedium)?.copyWith(
+          decoration: BoxDecoration(
             color: isSelected
-                ? ThemeConstants.textPrimaryDark
-                : (isDark ? ThemeConstants.textPrimaryDark : ThemeConstants.textPrimaryLight),
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                ? (isDark ? ThemeConstants.primaryDark : ThemeConstants.primaryLight).withOpacity(0.15)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(
+              color: isSelected
+                  ? (isDark ? ThemeConstants.primaryDark : ThemeConstants.primaryLight)
+                  : Colors.transparent,
+              width: 1.5,
+            ),
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: (isTablet ? textTheme.labelLarge : textTheme.labelMedium)?.copyWith(
+                color: isSelected
+                    ? (isDark ? ThemeConstants.primaryDark : ThemeConstants.primaryLight)
+                    : (isDark ? ThemeConstants.textSecondaryDark : ThemeConstants.textSecondaryLight),
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                letterSpacing: 0.3,
+              ),
+            ),
           ),
         ),
       ),

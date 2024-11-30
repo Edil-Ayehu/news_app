@@ -152,16 +152,17 @@ class _NewsFeedViewState extends State<NewsFeedView> {
       body: Column(
         children: [
           // Category List
-          SizedBox(
-            height: isTablet ? 60 : 50,
+          Container(
+            height: isTablet ? 50 : 44,
+            margin: EdgeInsets.only(bottom: isTablet ? 16 : 12),
             child: ListView.separated(
               padding: EdgeInsets.symmetric(
                 horizontal: isTablet ? 24 : 16,
-                vertical: isTablet ? 10 : 8,
+                vertical: isTablet ? 6 : 4,
               ),
               scrollDirection: Axis.horizontal,
               itemCount: _categories.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 8),
+              separatorBuilder: (context, index) => SizedBox(width: isTablet ? 12 : 8),
               itemBuilder: (context, index) {
                 final category = _categories[index];
                 return CategoryChip(
