@@ -49,7 +49,7 @@ class ArticleCard extends StatelessWidget {
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
               child: AspectRatio(
-                aspectRatio: isTablet ? 16 / 9 : 4 / 3,
+                aspectRatio: 16 / 9,
                 child: Image.network(
                   imageUrl,
                   fit: BoxFit.cover,
@@ -68,79 +68,91 @@ class ArticleCard extends StatelessWidget {
             ),
             
             // Content Section
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Category and Save Button Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: isDark ? ThemeConstants.primaryDark : ThemeConstants.primaryLight,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          category,
-                          style: textTheme.labelLarge?.copyWith(
-                            color: ThemeConstants.textPrimaryDark,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Category and Save Button Row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: isDark ? ThemeConstants.primaryDark : ThemeConstants.primaryLight,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            category,
+                            style: textTheme.labelSmall?.copyWith(
+                              color: ThemeConstants.textPrimaryDark,
+                            ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          isSaved ? Icons.bookmark : Icons.bookmark_border,
-                          color: isDark ? ThemeConstants.primaryDark : ThemeConstants.primaryLight,
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(
+                            minWidth: 32,
+                            minHeight: 32,
+                          ),
+                          icon: Icon(
+                            isSaved ? Icons.bookmark : Icons.bookmark_border,
+                            color: isDark ? ThemeConstants.primaryDark : ThemeConstants.primaryLight,
+                            size: 20,
+                          ),
+                          onPressed: onSaveToggle,
                         ),
-                        onPressed: onSaveToggle,
+                      ],
+                    ),
+                    
+                    const SizedBox(height: 8),
+                    
+                    // Title
+                    Text(
+                      title,
+                      style: (isTablet ? textTheme.titleMedium : textTheme.titleSmall)?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 8),
-                  
-                  // Title
-                  Text(
-                    title,
-                    style: textTheme.headlineMedium,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  
-                  const SizedBox(height: 8),
-                  
-                  // Description
-                  Text(
-                    description,
-                    style: textTheme.bodyMedium,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  
-                  const SizedBox(height: 12),
-                  
-                  // Author and Date Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'By $author',
-                          style: textTheme.bodyMedium,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    
+                    const SizedBox(height: 4),
+                    
+                    // Description
+                    Expanded(
+                      child: Text(
+                        description,
+                        style: (isTablet ? textTheme.bodyMedium : textTheme.bodySmall)?.copyWith(
+                          height: 1.2,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Text(
-                        Helpers.getTimeAgo(publishedAt),
-                        style: textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                    
+                    // Author and Date Row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'By $author',
+                            style: textTheme.bodySmall,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Text(
+                          Helpers.getTimeAgo(publishedAt),
+                          style: textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

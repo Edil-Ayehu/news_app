@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:news_app/controllers/auth_controller.dart';
 import 'package:news_app/views/auth/login_view.dart';
 import 'package:news_app/widgets/news/category_chip.dart';
+import 'package:news_app/widgets/news/article_card.dart';
 
 class NewsFeedView extends StatefulWidget {
   const NewsFeedView({super.key});
@@ -44,7 +45,8 @@ class _NewsFeedViewState extends State<NewsFeedView> {
       Article(
         id: 'tech_1',
         title: 'AI Revolution: Latest Developments in Machine Learning',
-        description: 'New breakthroughs in AI technology are reshaping the future of computing.',
+        description:
+            'New breakthroughs in AI technology are reshaping the future of computing.',
         content: 'Full article content here...',
         author: 'Tech Reporter',
         publishedAt: DateTime.now().subtract(const Duration(hours: 1)),
@@ -58,7 +60,8 @@ class _NewsFeedViewState extends State<NewsFeedView> {
       Article(
         id: 'tech_2',
         title: 'AI Revolution: Latest Developments in Machine Learning',
-        description: 'New breakthroughs in AI technology are reshaping the future of computing.',
+        description:
+            'New breakthroughs in AI technology are reshaping the future of computing.',
         content: 'Full article content here...',
         author: 'Tech Reporter',
         publishedAt: DateTime.now().subtract(const Duration(hours: 1)),
@@ -72,7 +75,8 @@ class _NewsFeedViewState extends State<NewsFeedView> {
       Article(
         id: 'tech_3',
         title: 'AI Revolution: Latest Developments in Machine Learning',
-        description: 'New breakthroughs in AI technology are reshaping the future of computing.',
+        description:
+            'New breakthroughs in AI technology are reshaping the future of computing.',
         content: 'Full article content here...',
         author: 'Tech Reporter',
         publishedAt: DateTime.now().subtract(const Duration(hours: 1)),
@@ -86,7 +90,8 @@ class _NewsFeedViewState extends State<NewsFeedView> {
       Article(
         id: 'tech_4',
         title: 'AI Revolution: Latest Developments in Machine Learning',
-        description: 'New breakthroughs in AI technology are reshaping the future of computing.',
+        description:
+            'New breakthroughs in AI technology are reshaping the future of computing.',
         content: 'Full article content here...',
         author: 'Tech Reporter',
         publishedAt: DateTime.now().subtract(const Duration(hours: 1)),
@@ -103,7 +108,9 @@ class _NewsFeedViewState extends State<NewsFeedView> {
     // Filter articles by selected category
     final filteredArticles = _selectedCategory == 'All'
         ? newArticles
-        : newArticles.where((article) => article.category.name == _selectedCategory).toList();
+        : newArticles
+            .where((article) => article.category.name == _selectedCategory)
+            .toList();
 
     setState(() {
       _articles = filteredArticles;
@@ -182,14 +189,43 @@ class _NewsFeedViewState extends State<NewsFeedView> {
                                 vertical: isTablet ? 20 : 16,
                               ),
                               sliver: SliverGrid(
-                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: size.width > 1200 ? 4 : (isTablet ? 2 : 1),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: size.width > 1200
+                                      ? 4
+                                      : (isTablet ? 2 : 1),
                                   mainAxisSpacing: isTablet ? 20 : 16,
                                   crossAxisSpacing: isTablet ? 20 : 16,
-                                  childAspectRatio: isTablet ? 0.8 : 1.2,
+                                  childAspectRatio: size.width > 1200
+                                      ? 0.6
+                                      : (isTablet
+                                          ? 0.55
+                                          : 0.8),
                                 ),
                                 delegate: SliverChildBuilderDelegate(
-                                  (context, index) => _ArticleCard(article: _articles[index]),
+                                  (context, index) {
+                                    final article = _articles[index];
+                                    return ArticleCard(
+                                      title: article.title,
+                                      description: article.description,
+                                      imageUrl: article.imageUrl,
+                                      author: article.author,
+                                      publishedAt: article.publishedAt,
+                                      category: article.category.name,
+                                      isSaved: article.isBookmarked,
+                                      onTap: () {
+                                        // TODO: Navigate to article detail
+                                      },
+                                      onSaveToggle: () {
+                                        // TODO: Implement bookmark functionality
+                                        setState(() {
+                                          _articles[index] = article.copyWith(
+                                            isBookmarked: !article.isBookmarked,
+                                          );
+                                        });
+                                      },
+                                    );
+                                  },
                                   childCount: _articles.length,
                                 ),
                               ),
@@ -199,101 +235,6 @@ class _NewsFeedViewState extends State<NewsFeedView> {
                       ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ArticleCard extends StatelessWidget {
-  final Article article;
-
-  const _ArticleCard({required this.article});
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textTheme = Theme.of(context).textTheme;
-
-    return Card(
-      elevation: 2,
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {
-          // TODO: Navigate to article detail
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Image.network(
-                article.imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  color: isDark ? Colors.grey[800] : Colors.grey[200],
-                  child: const Icon(Icons.image_not_supported),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      article.title,
-                      style: textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Flexible(
-                      child: Text(
-                        article.description,
-                        style: textTheme.bodyMedium,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.access_time,
-                          size: 16,
-                          color: Theme.of(context).textTheme.bodySmall?.color,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${article.readTime} min read',
-                          style: textTheme.bodySmall,
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          icon: Icon(
-                            article.isBookmarked
-                                ? Icons.bookmark
-                                : Icons.bookmark_border,
-                            size: 20,
-                          ),
-                          onPressed: () {
-                            // TODO: Implement bookmark functionality
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
