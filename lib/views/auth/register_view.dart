@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/app_constants.dart';
 import 'package:news_app/core/constants/theme_constants.dart';
-import 'package:news_app/views/news/article_detail_view_.dart';
+import 'package:news_app/views/news/news_feed_view.dart';
 import 'package:news_app/widgets/common/custom_button.dart';
 import 'package:news_app/widgets/common/custom_textfield.dart';
 import 'package:get/get.dart';

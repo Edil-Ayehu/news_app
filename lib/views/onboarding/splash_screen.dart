@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/views/news/news_feed_view.dart';
 import 'package:news_app/views/onboarding/onboarding_screen.dart';
 import 'package:news_app/views/auth/login_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:news_app/controllers/auth_controller.dart';
 
-import '../news/article_detail_view_.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
